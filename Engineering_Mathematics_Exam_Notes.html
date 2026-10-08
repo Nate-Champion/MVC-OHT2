@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Mathematics — Vector Calculus Exam Notes</title>
+<style>
+:root{
+  --bg:#f6f7fb; --card:#fff; --ink:#172033; --muted:#5e687b;
+  --accent:#315efb; --accent2:#7c3aed; --good:#16803c; --warn:#a15c00;
+  --danger:#b42318; --line:#e2e6ef; --code:#101828;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;line-height:1.65}
+header{background:linear-gradient(135deg,#16204a,#315efb);color:#fff;padding:48px 20px}
+header .wrap,main{max-width:1050px;margin:auto}
+h1{font-size:clamp(30px,5vw,52px);line-height:1.1;margin:0 0 12px}
+h2{font-size:30px;margin-top:0}
+h3{font-size:21px}
+p{margin:9px 0}
+.subtitle{font-size:18px;opacity:.92}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.badge{background:rgba(255,255,255,.16);padding:6px 11px;border-radius:999px;font-size:13px}
+main{padding:28px 16px 70px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:25px;margin:18px 0;box-shadow:0 5px 20px rgba(20,30,60,.05)}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.toc a{display:block;padding:12px 14px;border:1px solid var(--line);border-radius:12px;color:var(--accent);text-decoration:none;background:#fafbff}
+.formula{background:#f0f4ff;border-left:5px solid var(--accent);padding:14px 16px;border-radius:10px;margin:14px 0;font-family:Georgia,serif;font-size:18px;overflow:auto}
+.example{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:17px;margin:15px 0}
+.step{margin:7px 0;padding-left:10px;border-left:3px solid #cbd5ff}
+.tip{background:#ecfdf3;border-left:5px solid var(--good);padding:13px 16px;border-radius:10px}
+.warn{background:#fff7ed;border-left:5px solid var(--warn);padding:13px 16px;border-radius:10px}
+.danger{background:#fff1f2;border-left:5px solid var(--danger);padding:13px 16px;border-radius:10px}
+.k{font-weight:800;color:var(--accent)}
+code{background:#eef1f6;padding:2px 6px;border-radius:5px}
+pre{background:var(--code);color:#f2f4f7;padding:15px;border-radius:12px;overflow:auto}
+table{width:100%;border-collapse:collapse;margin:14px 0}
+th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
+th{background:#f0f3fa}
+ul,ol{padding-left:25px}
+hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+.small{color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.quick{padding:16px;border:1px solid var(--line);border-radius:13px}
+.answer{color:var(--good);font-weight:700}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin:10px 0;background:#fff}
+summary{cursor:pointer;font-weight:700}
+.check{font-size:16px}
+@media print{
+ body{background:white}.card{box-shadow:none;break-inside:avoid}
+ header{background:#222!important;padding:25px}.toc{display:none}
+ a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="wrap">
+  <div class="badge">Advanced Engineering Mathematics • Exam Cram</div>
+  <h1>Vector Calculus & Partial Derivatives</h1>
+  <p class="subtitle">Kreyszig-style notes for Sections 9.1, 9.2, 9.3, 9.4, 9.6, 9.7 and 9.8</p>
+  <div class="badges">
+    <span class="badge">Concepts</span><span class="badge">Formulas</span>
+    <span class="badge">Solved Examples</span><span class="badge">Exam Traps</span>
+    <span class="badge">Practice</span>
+  </div>
+</div>
+</header>
+
+<main>
+<section class="card">
+<h2>🚀 How to use these notes in 2 days</h2>
+<div class="grid">
+<div class="quick"><b>Day 1</b><br>Vectors → dot product → cross product → partial derivatives → Euler theorem.</div>
+<div class="quick"><b>Day 2</b><br>Gradient → directional derivatives → divergence → mixed practice → memorize formula sheet.</div>
+<div class="quick"><b>Before exam</b><br>Do the practice questions without looking at the answers. Then review the red “common mistakes”.</div>
+</div>
+</section>
+
+<section class="card" id="toc">
+<h2>📚 Contents</h2>
+<div class="toc">
+<a href="#v91">9.1 Simple Vectors</a>
+<a href="#v92">9.2 Dot Product</a>
+<a href="#v93">9.3 Cross Product</a>
+<a href="#v94">9.4 Divergence</a>
+<a href="#v96">9.6 Partial Derivatives & Euler Theorem</a>
+<a href="#v97">9.7 Directional Derivatives</a>
+<a href="#v98">9.8 Divergence — Simple Revision</a>
+<a href="#sheet">⚡ Formula Sheet</a>
+<a href="#practice">📝 Practice Exam</a>
+</div>
+</section>
+
+<section class="card" id="v91">
+<h2>9.1 Simple Vectors</h2>
+<h3>1. What is a vector?</h3>
+<p>A <b>scalar</b> has magnitude only. A <b>vector</b> has magnitude and direction.</p>
+<table>
+<tr><th>Scalar</th><th>Vector</th></tr>
+<tr><td>Mass, temperature, time</td><td>Velocity, force, displacement</td></tr>
+<tr><td>Written as a number</td><td>Written using components or an arrow</td></tr>
+</table>
+
+<h3>2. Component form</h3>
+<p>In 3D, a vector is usually written:</p>
+<div class="formula">𝐀 = A<sub>x</sub>𝐢 + A<sub>y</sub>𝐣 + A<sub>z</sub>𝐤 = ⟨A<sub>x</sub>, A<sub>y</sub>, A<sub>z</sub>⟩</div>
+<p>where 𝐢, 𝐣, 𝐤 are unit vectors along x, y, z.</p>
+
+<h3>3. Magnitude / length</h3>
+<div class="formula">|𝐀| = √(A<sub>x</sub><sup>2</sup> + A<sub>y</sub><sup>2</sup> + A<sub>z</sub><sup>2</sup>)</div>
+
+<div class="example">
+<b>Example:</b> Find the magnitude of 𝐀 = 3𝐢 − 4𝐣 + 12𝐤.
+<div class="step">|𝐀| = √(3² + (−4)² + 12²)</div>
+<div class="step">= √(9 + 16 + 144) = √169 = <b>13</b></div>
+</div>
+
+<h3>4. Unit vector</h3>
+<p>A unit vector has magnitude 1 and points in the same direction as the original vector.</p>
+<div class="formula">𝐀̂ = 𝐀 / |𝐀|</div>
+<div class="example">
+<b>Example:</b> 𝐀 = 3𝐢 + 4𝐣. Then |𝐀| = 5, so
+<div class="step">𝐀̂ = (3/5)𝐢 + (4/5)𝐣</div>
+</div>
+
+<h3>5. Adding and subtracting vectors</h3>
+<div class="formula">𝐀 ± 𝐁 = ⟨A<sub>x</sub> ± B<sub>x</sub>, A<sub>y</sub> ± B<sub>y</sub>, A<sub>z</sub> ± B<sub>z</sub>⟩</div>
+
+<div class="example">
+<b>Example:</b> 𝐀 = ⟨2,−1,3⟩ and 𝐁 = ⟨4,2,−1⟩.
+<div class="step">𝐀 + 𝐁 = ⟨6,1,2⟩</div>
+<div class="step">𝐀 − 𝐁 = ⟨−2,−3,4⟩</div>
+</div>
+
+<div class="tip"><b>Exam tip:</b> Always separate the i, j, k components. Most vector arithmetic is just component-by-component arithmetic.</div>
+</section>
+
+<section class="card" id="v92">
+<h2>9.2 Dot Product</h2>
+<h3>1. Definition</h3>
+<p>The dot product (scalar product) of two vectors produces a <b>scalar</b>.</p>
+<div class="formula">𝐀 · 𝐁 = A<sub>x</sub>B<sub>x</sub> + A<sub>y</sub>B<sub>y</sub> + A<sub>z</sub>B<sub>z</sub></div>
+
+<h3>2. Geometric formula</h3>
+<div class="formula">𝐀 · 𝐁 = |𝐀||𝐁| cos θ</div>
+<p>Therefore:</p>
+<div class="formula">cos θ = (𝐀 · 𝐁)/(|𝐀||𝐁|)</div>
+
+<h3>3. Perpendicular vectors</h3>
+<p>If two nonzero vectors are perpendicular, θ = 90°, so cos 90° = 0.</p>
+<div class="formula">𝐀 ⟂ 𝐁  ⇔  𝐀 · 𝐁 = 0</div>
+
+<div class="example">
+<b>Example:</b> Determine whether 𝐀 = ⟨1,2,3⟩ and 𝐁 = ⟨2,−1,0⟩ are perpendicular.
+<div class="step">𝐀 · 𝐁 = (1)(2) + (2)(−1) + (3)(0)</div>
+<div class="step">= 2 − 2 + 0 = <b>0</b></div>
+<div class="step">Therefore, <b>𝐀 and 𝐁 are perpendicular.</b></div>
+</div>
+
+<h3>4. Angle between vectors</h3>
+<div class="example">
+<b>Example:</b> Find the angle between 𝐀 = 𝐢 + 𝐣 and 𝐁 = 𝐢 − 𝐣.
+<div class="step">𝐀 · 𝐁 = 1(1)+1(−1)=0</div>
+<div class="step">Therefore cos θ = 0.</div>
+<div class="step">θ = <b>90°</b>.</div>
+</div>
+
+<h3>5. Projection / scalar component</h3>
+<p>The scalar component of 𝐀 in the direction of 𝐁 is:</p>
+<div class="formula">comp<sub>𝐁</sub>𝐀 = (𝐀 · 𝐁)/|𝐁|</div>
+<p>The vector projection is:</p>
+<div class="formula">proj<sub>𝐁</sub>𝐀 = [(𝐀 · 𝐁)/|𝐁|²]𝐁</div>
+
+<div class="danger"><b>Common mistake:</b> Dot product gives a <b>scalar</b>, not a vector. If your final answer still contains i, j, k, you probably did not finish a dot product.</div>
+</section>
+
+<section class="card" id="v93">
+<h2>9.3 Cross Product</h2>
+<h3>1. What does it do?</h3>
+<p>The cross product of two vectors produces a <b>vector perpendicular to both</b> vectors.</p>
+<div class="formula">𝐀 × 𝐁 = |𝐀||𝐁| sin θ 𝐧̂</div>
+<p>where 𝐧̂ is the unit vector perpendicular to the plane containing 𝐀 and 𝐁.</p>
+
+<h3>2. Determinant method</h3>
+<div class="formula">
+𝐀 × 𝐁 =
+| 𝐢   𝐣   𝐤 |<br>
+| A<sub>x</sub> A<sub>y</sub> A<sub>z</sub> |<br>
+| B<sub>x</sub> B<sub>y</sub> B<sub>z</sub> |
+</div>
+
+<p>Expanded:</p>
+<div class="formula">
+𝐀 × 𝐁 =
+(A<sub>y</sub>B<sub>z</sub> − A<sub>z</sub>B<sub>y</sub>)𝐢
+− (A<sub>x</sub>B<sub>z</sub> − A<sub>z</sub>B<sub>x</sub>)𝐣
++ (A<sub>x</sub>B<sub>y</sub> − A<sub>y</sub>B<sub>x</sub>)𝐤
+</div>
+
+<div class="example">
+<b>Example:</b> Find 𝐀 × 𝐁 for 𝐀 = ⟨1,2,3⟩, 𝐁 = ⟨4,5,6⟩.
+<div class="step">i: 2(6) − 3(5) = 12 − 15 = −3</div>
+<div class="step">j: −[1(6) − 3(4)] = −(6 − 12) = +6</div>
+<div class="step">k: 1(5) − 2(4) = 5 − 8 = −3</div>
+<div class="step"><b>𝐀 × 𝐁 = ⟨−3,6,−3⟩</b></div>
+</div>
+
+<h3>3. Direction / right-hand rule</h3>
+<ul>
+<li>Point your index finger along 𝐀.</li>
+<li>Point your middle finger along 𝐁.</li>
+<li>Your thumb gives the direction of 𝐀 × 𝐁.</li>
+</ul>
+
+<h3>4. Important properties</h3>
+<div class="formula">𝐀 × 𝐁 = −(𝐁 × 𝐀)</div>
+<div class="formula">𝐀 × 𝐀 = 0</div>
+<div class="formula">𝐀 × 𝐁 = 0  ⇔ 𝐀 and 𝐁 are parallel (or one is zero)</div>
+
+<h3>5. Area</h3>
+<p>Area of the parallelogram formed by 𝐀 and 𝐁:</p>
+<div class="formula">Area = |𝐀 × 𝐁|</div>
+<p>Area of the triangle:</p>
+<div class="formula">Area = ½|𝐀 × 𝐁|</div>
+
+<div class="danger"><b>Most common cross-product trap:</b> The j-component gets a <b>minus sign</b> in determinant expansion.</div>
+</section>
+
+<section class="card" id="v94">
+<h2>9.4 Divergence</h2>
+<p>For a vector field, divergence measures the net tendency of the field to <b>spread out from or converge toward a point</b>.</p>
+
+<h3>1. Vector field</h3>
+<div class="formula">𝐅(x,y,z) = P(x,y,z)𝐢 + Q(x,y,z)𝐣 + R(x,y,z)𝐤</div>
+
+<h3>2. Divergence formula</h3>
+<div class="formula">
+∇ · 𝐅 =
+∂P/∂x + ∂Q/∂y + ∂R/∂z
+</div>
+
+<p>Notice the pattern: <b>differentiate each component with respect to its matching variable.</b></p>
+
+<div class="example">
+<b>Example:</b> Find div 𝐅 for
+𝐅 = x²y𝐢 + 3yz²𝐣 + 5xz𝐤.
+<div class="step">P = x²y → ∂P/∂x = 2xy</div>
+<div class="step">Q = 3yz² → ∂Q/∂y = 3z²</div>
+<div class="step">R = 5xz → ∂R/∂z = 5x</div>
+<div class="step"><b>∇·𝐅 = 2xy + 3z² + 5x</b></div>
+</div>
+
+<h3>3. Physical intuition</h3>
+<table>
+<tr><th>Divergence</th><th>Meaning</th></tr>
+<tr><td>∇·𝐅 &gt; 0</td><td>Net source / field spreading outward</td></tr>
+<tr><td>∇·𝐅 &lt; 0</td><td>Net sink / field converging inward</td></tr>
+<tr><td>∇·𝐅 = 0</td><td>No net local spreading; called divergence-free or solenoidal</td></tr>
+</table>
+
+<div class="tip"><b>Memory trick:</b> DIV = “same letter underneath”: P with x, Q with y, R with z.</div>
+</section>
+
+<section class="card" id="v96">
+<h2>9.6 Partial Derivatives & Euler's Theorem</h2>
+
+<h3>1. What is a partial derivative?</h3>
+<p>If a function has several independent variables, a partial derivative measures change with respect to <b>one variable while keeping the others constant</b>.</p>
+
+<div class="formula">z = f(x,y)</div>
+<div class="formula">f<sub>x</sub> = ∂f/∂x &nbsp;&nbsp;&nbsp; f<sub>y</sub> = ∂f/∂y</div>
+
+<div class="example">
+<b>Example:</b> z = x³y² + 4xy + y³.
+<div class="step"><b>With respect to x:</b> treat y as constant.<br>
+z<sub>x</sub> = 3x²y² + 4y</div>
+<div class="step"><b>With respect to y:</b> treat x as constant.<br>
+z<sub>y</sub> = 2x³y + 4x + 3y²</div>
+</div>
+
+<h3>2. Second-order partial derivatives</h3>
+<div class="formula">f<sub>xx</sub> = ∂²f/∂x², &nbsp; f<sub>yy</sub> = ∂²f/∂y², &nbsp; f<sub>xy</sub> = ∂²f/(∂y∂x)</div>
+
+<div class="example">
+<b>Example:</b> f(x,y)=x²y³.
+<div class="step">f<sub>x</sub>=2xy³</div>
+<div class="step">f<sub>xx</sub>=2y³</div>
+<div class="step">f<sub>y</sub>=3x²y²</div>
+<div class="step">f<sub>yy</sub>=6x²y</div>
+<div class="step">f<sub>xy</sub>=6xy²</div>
+</div>
+
+<div class="tip"><b>Useful fact:</b> For sufficiently smooth functions, mixed partials are equal:
+f<sub>xy</sub> = f<sub>yx</sub>.</div>
+
+<h3>3. Homogeneous functions</h3>
+<p>A function f(x,y) is homogeneous of degree n if:</p>
+<div class="formula">f(tx,ty) = t<sup>n</sup> f(x,y)</div>
+
+<p>Examples:</p>
+<ul>
+<li>x² + xy + y² is homogeneous of degree 2.</li>
+<li>x³ + x²y + y³ is homogeneous of degree 3.</li>
+<li>x² + y is <b>not</b> homogeneous because the terms have different degrees.</li>
+</ul>
+
+<h3>4. Euler's theorem for homogeneous functions</h3>
+<p>If f(x,y) is homogeneous of degree n:</p>
+<div class="formula"><b>x f<sub>x</sub> + y f<sub>y</sub> = n f</b></div>
+
+<p>For three variables:</p>
+<div class="formula"><b>x f<sub>x</sub> + y f<sub>y</sub> + z f<sub>z</sub> = n f</b></div>
+
+<div class="example">
+<b>Example:</b> Verify Euler's theorem for f(x,y)=x²+xy+y².
+<div class="step">This is homogeneous of degree n=2.</div>
+<div class="step">f<sub>x</sub>=2x+y; &nbsp; f<sub>y</sub>=x+2y</div>
+<div class="step">x f<sub>x</sub> + y f<sub>y</sub> = x(2x+y)+y(x+2y)</div>
+<div class="step">= 2x²+2xy+2y²</div>
+<div class="step">= 2(x²+xy+y²) = <b>2f</b></div>
+</div>
+
+<div class="warn"><b>Exam check:</b> Before using Euler's theorem, verify that the function is homogeneous and identify its degree.</div>
+</section>
+
+<section class="card" id="v97">
+<h2>9.7 Directional Derivatives</h2>
+
+<h3>1. What does it mean?</h3>
+<p>The directional derivative tells you the <b>rate at which a scalar function changes in a specified direction</b>.</p>
+
+<h3>2. Gradient</h3>
+<p>For f(x,y,z), the gradient is:</p>
+<div class="formula">∇f = f<sub>x</sub>𝐢 + f<sub>y</sub>𝐣 + f<sub>z</sub>𝐤</div>
+<p>In 2D:</p>
+<div class="formula">∇f = f<sub>x</sub>𝐢 + f<sub>y</sub>𝐣</div>
+
+<p>The gradient points in the direction of <b>maximum increase</b> of f.</p>
+
+<h3>3. Directional derivative formula</h3>
+<div class="formula"><b>D<sub>𝐮</sub>f = ∇f · 𝐮</b></div>
+<p>where 𝐮 must be a <b>unit vector</b>.</p>
+
+<h3>4. The 4-step method ⭐</h3>
+<ol>
+<li>Find ∇f.</li>
+<li>Find the direction vector 𝐯.</li>
+<li>Convert it to a unit vector: 𝐮 = 𝐯/|𝐯|.</li>
+<li>Calculate D<sub>𝐮</sub>f = ∇f · 𝐮.</li>
+</ol>
+
+<div class="example">
+<b>Example:</b> Find the directional derivative of
+f(x,y)=x²+3xy+y² at (1,2) in the direction from (1,2) to (4,6).
+
+<div class="step"><b>Step 1: Gradient</b><br>
+∇f = ⟨2x+3y, 3x+2y⟩</div>
+
+<div class="step"><b>Step 2: Evaluate at (1,2)</b><br>
+∇f(1,2)=⟨2+6,3+4⟩=⟨8,7⟩</div>
+
+<div class="step"><b>Step 3: Direction vector</b><br>
+𝐯 = ⟨4−1,6−2⟩ = ⟨3,4⟩</div>
+
+<div class="step"><b>Step 4: Unit vector</b><br>
+|𝐯|=5, so 𝐮=⟨3/5,4/5⟩</div>
+
+<div class="step"><b>Step 5: Dot product</b><br>
+D<sub>𝐮</sub>f = ⟨8,7⟩·⟨3/5,4/5⟩
+=24/5+28/5
+=<b>52/5</b></div>
+</div>
+
+<h3>5. Maximum directional derivative</h3>
+<p>The maximum possible directional derivative at a point is:</p>
+<div class="formula"><b>max D<sub>𝐮</sub>f = |∇f|</b></div>
+<p>It occurs in the direction:</p>
+<div class="formula"><b>𝐮 = ∇f / |∇f|</b></div>
+
+<h3>6. Minimum directional derivative</h3>
+<div class="formula">min D<sub>𝐮</sub>f = −|∇f|</div>
+<p>and it occurs in the direction opposite to the gradient.</p>
+
+<h3>7. Direction of zero change</h3>
+<p>If 𝐮 is perpendicular to ∇f:</p>
+<div class="formula">∇f · 𝐮 = 0</div>
+<p>then the directional derivative is zero.</p>
+
+<div class="danger"><b>Very common exam mistake:</b> If the question gives a direction vector such as ⟨3,4⟩, do NOT use it directly. Normalize it first unless it is already a unit vector.</div>
+</section>
+
+<section class="card" id="v98">
+<h2>9.8 Divergence — Simple Revision</h2>
+<p>For quick exam purposes, remember divergence as the dot product of the del operator with a vector field.</p>
+
+<div class="formula">
+∇ = 𝐢 ∂/∂x + 𝐣 ∂/∂y + 𝐤 ∂/∂z
+</div>
+
+<p>If:</p>
+<div class="formula">𝐅 = P𝐢 + Q𝐣 + R𝐤</div>
+
+<p>then:</p>
+<div class="formula"><b>div 𝐅 = ∇·𝐅 = P<sub>x</sub> + Q<sub>y</sub> + R<sub>z</sub></b></div>
+
+<div class="example">
+<b>Fast example:</b> 𝐅 = x²𝐢 + yz𝐣 + 3z²𝐤.
+<div class="step">∂(x²)/∂x = 2x</div>
+<div class="step">∂(yz)/∂y = z</div>
+<div class="step">∂(3z²)/∂z = 6z</div>
+<div class="step"><b>div 𝐅 = 2x + z + 6z = 2x + 7z</b></div>
+</div>
+
+<h3>Divergence vs. Directional Derivative</h3>
+<table>
+<tr><th>Directional derivative</th><th>Divergence</th></tr>
+<tr><td>Usually starts with scalar f</td><td>Starts with vector field 𝐅</td></tr>
+<tr><td>Measures change of f in one direction</td><td>Measures spreading/convergence of 𝐅</td></tr>
+<tr><td>D<sub>𝐮</sub>f = ∇f · 𝐮</td><td>∇·𝐅</td></tr>
+<tr><td>Result is scalar</td><td>Result is scalar</td></tr>
+</table>
+</section>
+
+<section class="card" id="sheet">
+<h2>⚡ One-Page Formula Sheet</h2>
+
+<div class="grid">
+<div class="quick"><b>Vector magnitude</b><br>|𝐀| = √(A<sub>x</sub>²+A<sub>y</sub>²+A<sub>z</sub>²)</div>
+<div class="quick"><b>Unit vector</b><br>𝐀̂ = 𝐀/|𝐀|</div>
+<div class="quick"><b>Dot product</b><br>𝐀·𝐁 = A<sub>x</sub>B<sub>x</sub>+A<sub>y</sub>B<sub>y</sub>+A<sub>z</sub>B<sub>z</sub></div>
+<div class="quick"><b>Angle</b><br>cosθ = (𝐀·𝐁)/(|𝐀||𝐁|)</div>
+<div class="quick"><b>Perpendicular</b><br>𝐀·𝐁 = 0</div>
+<div class="quick"><b>Cross product</b><br>𝐀×𝐁 = |𝐀||𝐁|sinθ 𝐧̂</div>
+<div class="quick"><b>Parallel</b><br>𝐀×𝐁 = 0</div>
+<div class="quick"><b>Parallelogram area</b><br>|𝐀×𝐁|</div>
+<div class="quick"><b>Triangle area</b><br>½|𝐀×𝐁|</div>
+<div class="quick"><b>Gradient</b><br>∇f = ⟨f<sub>x</sub>,f<sub>y</sub>,f<sub>z</sub>⟩</div>
+<div class="quick"><b>Directional derivative</b><br>D<sub>𝐮</sub>f = ∇f·𝐮</div>
+<div class="quick"><b>Maximum D.D.</b><br>|∇f|</div>
+<div class="quick"><b>Partial derivative</b><br>Differentiate one variable; hold others constant.</div>
+<div class="quick"><b>Euler 2D</b><br>xf<sub>x</sub>+yf<sub>y</sub>=nf</div>
+<div class="quick"><b>Euler 3D</b><br>xf<sub>x</sub>+yf<sub>y</sub>+zf<sub>z</sub>=nf</div>
+<div class="quick"><b>Divergence</b><br>∇·𝐅=P<sub>x</sub>+Q<sub>y</sub>+R<sub>z</sub></div>
+</div>
+</section>
+
+<section class="card">
+<h2>🧠 What to memorize vs. what to understand</h2>
+<table>
+<tr><th>Memorize</th><th>Understand</th></tr>
+<tr><td>Magnitude and unit-vector formulas</td><td>Why normalization gives length 1</td></tr>
+<tr><td>Dot product formula</td><td>Dot product relates to angle</td></tr>
+<tr><td>Cross-product determinant</td><td>Cross product is perpendicular</td></tr>
+<tr><td>∇f formula</td><td>Gradient points toward maximum increase</td></tr>
+<tr><td>D<sub>𝐮</sub>f = ∇f·𝐮</td><td>Why the direction vector must be a unit vector</td></tr>
+<tr><td>Euler's theorem</td><td>How to recognize a homogeneous function</td></tr>
+<tr><td>∇·𝐅 formula</td><td>Divergence as spreading/convergence</td></tr>
+</table>
+</section>
+
+<section class="card" id="practice">
+<h2>📝 Practice Exam</h2>
+<p class="small">Try these without looking at the answers. Click each question to reveal the solution.</p>
+
+<details>
+<summary>Q1. Find the magnitude and unit vector of 𝐀 = ⟨2,−3,6⟩.</summary>
+<p>|𝐀| = √(4+9+36) = 7.</p>
+<p class="answer">𝐀̂ = ⟨2/7,−3/7,6/7⟩.</p>
+</details>
+
+<details>
+<summary>Q2. Find 𝐀·𝐁 for 𝐀=⟨2,1,−3⟩ and 𝐁=⟨1,4,2⟩.</summary>
+<p>2(1)+1(4)+(−3)(2) = 2+4−6.</p>
+<p class="answer">𝐀·𝐁 = 0, so they are perpendicular.</p>
+</details>
+
+<details>
+<summary>Q3. Find 𝐀×𝐁 for 𝐀=⟨1,0,2⟩ and 𝐁=⟨3,1,4⟩.</summary>
+<p>i: 0(4)−2(1)=−2</p>
+<p>j: −[1(4)−2(3)] = 2</p>
+<p>k: 1(1)−0(3)=1</p>
+<p class="answer">𝐀×𝐁 = ⟨−2,2,1⟩.</p>
+</details>
+
+<details>
+<summary>Q4. Find the divergence of 𝐅 = x²y𝐢 + xy²𝐣 + z³𝐤.</summary>
+<p>∂(x²y)/∂x = 2xy; ∂(xy²)/∂y = 2xy; ∂(z³)/∂z = 3z².</p>
+<p class="answer">∇·𝐅 = 4xy + 3z².</p>
+</details>
+
+<details>
+<summary>Q5. Find f<sub>x</sub> and f<sub>y</sub> for f=x²y+sin(xy).</summary>
+<p class="answer">f<sub>x</sub> = 2xy + y cos(xy).</p>
+<p class="answer">f<sub>y</sub> = x² + x cos(xy).</p>
+</details>
+
+<details>
+<summary>Q6. Is f=x³+2x²y+xy²+y³ homogeneous? If yes, degree?</summary>
+<p>Every term has total degree 3.</p>
+<p class="answer">Yes. It is homogeneous of degree 3.</p>
+</details>
+
+<details>
+<summary>Q7. Use Euler's theorem for f=x²+xy+y².</summary>
+<p>n=2, f<sub>x</sub>=2x+y, f<sub>y</sub>=x+2y.</p>
+<p class="answer">xf<sub>x</sub>+yf<sub>y</sub>=2f.</p>
+</details>
+
+<details>
+<summary>Q8. Find the directional derivative of f=x²+y² at (1,2) in direction ⟨3,4⟩.</summary>
+<p>∇f=⟨2x,2y⟩ → at (1,2): ⟨2,4⟩.</p>
+<p>Unit direction = ⟨3/5,4/5⟩.</p>
+<p class="answer">D<sub>𝐮</sub>f = 2(3/5)+4(4/5)=22/5.</p>
+</details>
+
+<details>
+<summary>Q9. What is the maximum directional derivative of f=x²+y² at (1,2)?</summary>
+<p>∇f(1,2)=⟨2,4⟩.</p>
+<p class="answer">Maximum = |∇f| = √20 = 2√5.</p>
+</details>
+
+<details>
+<summary>Q10. Find the direction of maximum increase of f=x²+3xy+y² at (1,2).</summary>
+<p>∇f=⟨2x+3y,3x+2y⟩.</p>
+<p>At (1,2): ∇f=⟨8,7⟩.</p>
+<p class="answer">Direction = ⟨8,7⟩ (or unit direction ⟨8,7⟩/√113).</p>
+</details>
+</section>
+
+<section class="card">
+<h2>🚨 Last-Minute Exam Traps</h2>
+<ul>
+<li><b>Dot ≠ cross:</b> dot gives a scalar; cross gives a vector.</li>
+<li><b>Cross product order matters:</b> 𝐀×𝐁 = −𝐁×𝐀.</li>
+<li><b>j sign:</b> determinant expansion has a minus on the j term.</li>
+<li><b>Directional derivative:</b> normalize the direction vector first.</li>
+<li><b>Gradient:</b> ∇f uses partial derivatives of a scalar function.</li>
+<li><b>Divergence:</b> ∇·𝐅 uses matching components: x with P, y with Q, z with R.</li>
+<li><b>Euler theorem:</b> only use it after confirming homogeneity and its degree.</li>
+<li><b>Partial derivative:</b> all other independent variables are treated as constants.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>🎯 30-Second Recognition Guide</h2>
+<table>
+<tr><th>If the question says…</th><th>Think…</th></tr>
+<tr><td>“magnitude of vector”</td><td>Square root of sum of squares</td></tr>
+<tr><td>“unit vector”</td><td>Vector ÷ magnitude</td></tr>
+<tr><td>“angle between vectors”</td><td>Dot product + cosθ</td></tr>
+<tr><td>“perpendicular”</td><td>Dot product = 0</td></tr>
+<tr><td>“normal/perpendicular vector to two vectors”</td><td>Cross product</td></tr>
+<tr><td>“area of parallelogram/triangle”</td><td>|A×B| / ½|A×B|</td></tr>
+<tr><td>“partial derivative”</td><td>Hold other variables constant</td></tr>
+<tr><td>“homogeneous function / Euler theorem”</td><td>Find degree n, then xf<sub>x</sub>+yf<sub>y</sub>=nf</td></tr>
+<tr><td>“directional derivative”</td><td>∇f·unit direction</td></tr>
+<tr><td>“maximum rate of change”</td><td>|∇f|</td></tr>
+<tr><td>“direction of maximum increase”</td><td>∇f</td></tr>
+<tr><td>“divergence of vector field”</td><td>∇·F</td></tr>
+</table>
+</section>
+
+<section class="card">
+<h2>✅ Final 2-Day Checklist</h2>
+<label class="check"><input type="checkbox"> I can find a vector's magnitude and unit vector.</label><br>
+<label class="check"><input type="checkbox"> I can calculate dot products and angles.</label><br>
+<label class="check"><input type="checkbox"> I can determine perpendicular vectors.</label><br>
+<label class="check"><input type="checkbox"> I can calculate a cross product without losing the j sign.</label><br>
+<label class="check"><input type="checkbox"> I can find areas using a cross product.</label><br>
+<label class="check"><input type="checkbox"> I can calculate first and second partial derivatives.</label><br>
+<label class="check"><input type="checkbox"> I can identify homogeneous functions and their degree.</label><br>
+<label class="check"><input type="checkbox"> I can apply Euler's theorem.</label><br>
+<label class="check"><input type="checkbox"> I can calculate a gradient.</label><br>
+<label class="check"><input type="checkbox"> I can normalize a direction vector.</label><br>
+<label class="check"><input type="checkbox"> I can calculate directional derivatives.</label><br>
+<label class="check"><input type="checkbox"> I know maximum directional derivative = |∇f|.</label><br>
+<label class="check"><input type="checkbox"> I can calculate divergence.</label>
+</section>
+
+<footer class="card small">
+<b>Note:</b> These are exam-focused study notes based on the mathematical topics you listed from Erwin Kreyszig's <i>Advanced Engineering Mathematics</i>. Section numbering can differ between editions, so use your course's edition/lecture sequence for exact section titles.
+</footer>
+</main>
+</body>
+</html>
